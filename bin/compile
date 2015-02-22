@@ -12,6 +12,13 @@ function indent() {
 
 unset GIT_DIR
 
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+echo "Build directory: $BUILD_DIR" | indent
+echo "Cache directory: $CACHE_DIR" | indent
+
 for BUILDPACK in $(cat $1/buildpacks.txt); do
   dir=$(mktemp -t buildpackXXXXX)
   rm -rf $dir
@@ -45,11 +52,11 @@ for BUILDPACK in $(cat $1/buildpacks.txt); do
     # we'll get errors later if these are needed and don't exist
     chmod -f +x $dir/bin/{detect,compile,release} || true
 
-    framework=$($dir/bin/detect $1)
+    framework=$($dir/bin/detect $BUILD_DIR)
 
     if [ $? == 0 ]; then
       echo "=====> Detected Framework: $framework"
-      $dir/bin/compile $1 $2 $3
+      $dir/bin/compile $BUILD_DIR $CACHE_DIR $ENV_DIR
 
       if [ $? != 0 ]; then
         exit 1
@@ -61,12 +68,12 @@ for BUILDPACK in $(cat $1/buildpacks.txt); do
       fi
 
       if [ -x $dir/bin/release ]; then
-        $dir/bin/release $1 > $1/last_pack_release.out
+        $dir/bin/release $BUILD_DIR > $BUILD_DIR/last_pack_release.out
       fi
     fi
   fi
 done
 
-if [ -e $1/last_pack_release.out ]; then
+if [ -e $BUILD_DIR/last_pack_release.out ]; then
   echo "Using release configuration from last framework ($framework)."
 fi
