@@ -4,11 +4,12 @@ Use multiple buildpacks on your app
 
 ## Usage
 
-    $ heroku buildpacks:set https://github.com/ddollar/heroku-buildpack-multi.git
+    $ heroku buildpacks:set https://github.com/djmattyg007/heroku-buildpack-multi.git
 
-    $ cat .buildpacks
-    https://github.com/heroku/heroku-buildpack-nodejs.git#0198c71daa8
-    https://github.com/heroku/heroku-buildpack-ruby.git#v86
+    $ cat buildpacks.txt
+    https://github.com/djmattyg007/heroku-buildpack-sassc.git#1.3.0
+    https://github.com/heroku/heroku-buildpack-python.git#v80
+    https://github.com/heroku/heroku-buildpack-php.git#v101
 
 ## License
 
